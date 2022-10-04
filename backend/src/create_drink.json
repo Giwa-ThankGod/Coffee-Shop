@@ -1,8 +1,8 @@
 {
-    "title": "orange-juice",
+    "title": "wine",
     "recipe": [{
-        "color": "orange",
-        "name": "orange",
+        "color": "red",
+        "name": "red-wine",
         "parts": 2
     }]
 }

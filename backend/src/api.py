@@ -68,7 +68,7 @@ def drink_detail():
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods=['POST'])
-# @requires_auth('post:drinks')
+@requires_auth('post:drinks')
 def create_drink():
     #grab post arguments
     body = request.get_json()
@@ -103,7 +103,7 @@ def create_drink():
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks/<int:id>', methods=['PATCH'])
-# @requires_auth('patch:drinks')
+@requires_auth('patch:drinks')
 def edit_drink(id):
     #grab post arguments
     body = request.get_json()
@@ -137,7 +137,7 @@ def edit_drink(id):
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks/<int:id>', methods=['DELETE'])
-# @requires_auth('delete:drinks')
+@requires_auth('delete:drinks')
 def delete_drink(id):
     
     try:
@@ -224,4 +224,3 @@ def autherror(AuthError):
         "error": AuthError.error['code'],
         "message": AuthError.error['description'],
         }), AuthError.status_code
-    # pass
