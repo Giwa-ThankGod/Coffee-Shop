@@ -104,7 +104,9 @@ The Auth0 JWT includes claims for permissions based on the user's role within th
 
 ### Getting Started with the API
 - Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
-- Authentication: This version of the application requires and utilizes a third party authentication(Auth0). Go ahead and register an account with Auth0
+- Authentication: This version of the application requires and utilizes a third party authentication(Auth0). 
+Get access token by visting this domain.
+`https://coffee-shopp.us.auth0.com/authorize?audience=Coffee-Shop&scope=SCOPE&response_type=token&client_id=Jo5X0tzmyjT1z43PWf4rv8OiiJwNuikZ&redirect_uri=https://127.0.0.1:8100/&state=STATE`
 
 ### Error Handling
 Errors are returned as JSON objects in the following format:
@@ -115,7 +117,7 @@ Errors are returned as JSON objects in the following format:
     "message": "bad request"
 }
 ```
-The API will return four error types when requests fail:
+The API will return Six error types when requests fail:
 - 400: Bad Request
 - 401: Unauthorized Access
 - 404: Resource Not Found
@@ -126,6 +128,7 @@ The API will return four error types when requests fail:
 ### Endpoints 
 #### GET /drinks
 - General:
+    - Public endpoint, requires no authentication
     - Returns a list of drinks with a shortend information about drink recipe.
 
 - Sample: `curl http://127.0.0.1:5000/drinks`
@@ -150,16 +153,48 @@ The API will return four error types when requests fail:
 
 #### GET /drinks-detail
 - General:
-    - Requires a valid authorization token from your Auth0 account.
+    - Requires a valid authorization token from Auth0.
+    - Authorization token must contain the permission 'get:drinks-detail'.
     - Returns a list of drinks with a full information about drink recipe.
 
-- Sample: `curl -H "Authorization: Bearer { your token}" http://127.0.0.1:5000/drinks-detail`
+- Sample: `curl -H "Authorization: Bearer {your token}" http://127.0.0.1:5000/drinks-detail`
+
+```
+
+```
+
+#### POST /drinks
+- Requires a valid authorization token from Auth0.
+- Authorization token must contain the permission 'post:drinks'.
+- Creates a new drink using the submitted title and recipe parameter. 
+- Returns a list of drinks with a full information about drink recipe.
+- `curl http://127.0.0.1:5000/drinks -X POST -H "Authorization: Bearer {your token}, Content-Type: application/json" -d '{"title": "wine","recipe": [{"color": "red","name": "red-wine","parts": 2}]}'`
 
 ```
 
 ```
 
 
-#### POST /questions
-- Creates a new question using the submitted question, answer, category and difficulty parameter. Returns the id of the created question and success value. 
-- `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"Question Test 1", "answer":"Question Answer 1", "category":"3", "difficulty":5}'`
+#### PATCH /drinks/{drink_id}
+- Requires a valid authorization token from Auth0.
+- Authorization token must contain the permission 'patch:drinks'.
+- Updates an existing drink using the submitted title and recipe parameter. 
+- Returns a list of drinks with a full information about drink recipe.
+- `curl http://127.0.0.1:5000/drinks/2 -X PATCH -H "Authorization: Bearer {your token}, Content-Type: application/json" -d '{"title": "wine","recipe": [{"color": "red","name": "champagne","parts": 2}]}'`
+
+```
+
+```
+
+#### DELETE /drinks/{drink_id}
+- Requires a valid authorization token from Auth0.
+- Authorization token must contain the permission 'delete:drinks'.
+- Deletes the drink of the given ID if it exists. Returns the id of the deleted drink and the success value. 
+- `curl -X DELETE -H "Authorization: Bearer {your token}" http://127.0.0.1:5000/drinks/1`
+
+```
+{
+  "delete": 1,
+  "success": true
+}
+```
